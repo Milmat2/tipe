@@ -1,5 +1,18 @@
-from Board.py import Field
+from Board import Field
 import numpy as np
+
+
+
+def generate_binary(n,k):
+    vec = np.zeros(n, dtype = bool)
+    for i in range(n):
+        vec[i] = bool(k%2)
+        k//=2
+    return(vec)  
+
+
+
+
 
 class Algorithm:
     
@@ -22,7 +35,7 @@ class Algorithm:
 class ScoobyDoo(Algorithm):
 
     def play_move(self):       
-        if self.field.grass.all() == -1:
+        if (self.field.grass == -1).all():
             self.field.reveal1(0,0)
             return None
         
@@ -78,7 +91,76 @@ class ScoobyDoo(Algorithm):
         return(P)
         
     
-    # def reso_group(self, x, y):
-    #     l = self.field.neighbours(x,y)
-    #     for v in l:
-    #         if self.field.grass[v] == -1:
+    
+    
+    def frontiere_out(self):
+        L=[]
+        for i in range(self.field.length):
+            for j in range(self.field.width):
+                if self.field.grass[i,j] == -1:
+                    toto = False
+                    for x,y in self.field.neighbours(i,j):
+                        if self.field.grass[x,y] !=-1:
+                            toto = True
+                    if toto == True:
+                        L.append((i,j))
+        return(L)
+                        
+    def frontiere_in(self):
+        L=[]
+        for i in range(self.field.length):
+            for j in range(self.field.width):
+                if self.field.grass[i,j] != -1:
+                    toto = False
+                    for x,y in self.field.neighbours(i,j):
+                        if self.field.grass[x,y] == -1:
+                            toto = True
+                    if toto == True:
+                        L.append((i,j))
+        return(L)
+                                          
+                        
+                        
+            
+    
+    def generate_distributions(self,ncases,nmax, nmin = 0):
+        G = []
+        for i in range(2**ncases):
+            vect = generate_binary(ncases, i)
+            if nmin <=sum(vect)<= nmax :
+                G.append(vect)
+        return(G)    
+            
+        
+        
+            
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+   
